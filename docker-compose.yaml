@@ -1,0 +1,30 @@
+services:
+  app:
+    container_name: hearbeat365-dev
+    build:
+      context: .
+      target: deps
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    volumes:
+      - .:/app
+    command: >
+      sh -c "pnpm dev"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16.2-alpine
+    ports:
+      - ${DATABASE_PORT}:5432
+    volumes:
+      - hearbeat365-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+
+volumes:
+  hearbeat365-db:
