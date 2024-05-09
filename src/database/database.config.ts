@@ -2,13 +2,13 @@ import { z } from "zod";
 import { registerAs } from "@nestjs/config";
 
 const databaseConfigSchema = z.object({
-  DATABASE_HOST: z.string(),
-  DATABASE_PORT: z.string(),
-  DATABASE_USERNAME: z.string(),
-  DATABASE_PASSWORD: z.string(),
-  DATABASE_NAME: z.string(),
-  DATABASE_URL: z.string(),
-  DIRECT_URL: z.string(),
+  DATABASE_HOST: z.string().min(1),
+  DATABASE_PORT: z.string().min(1),
+  DATABASE_USERNAME: z.string().min(1),
+  DATABASE_PASSWORD: z.string().min(1),
+  DATABASE_NAME: z.string().min(1),
+  DATABASE_URL: z.string().min(1),
+  DIRECT_URL: z.string().min(1),
 });
 
 export type DatabaseConfig = z.infer<typeof databaseConfigSchema>;
