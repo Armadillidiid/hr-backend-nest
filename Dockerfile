@@ -9,13 +9,10 @@ RUN corepack enable
 WORKDIR /app
 
 
-###################
+######################################
 # First Stage: Install dependencies
-###################
+######################################
 FROM base AS deps
-# RUN echo "http://uk.alpinelinux.org/alpine/alpine/v3.19/main" > /etc/apk/repositories
-# RUN echo "http://uk.alpinelinux.org/alpine/alpine/v3.19/community" > /etc/apk/repositories
-# RUN echo "http://mirror.leaseweb.com/alpine/" > /etc/apk/repositories
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 
@@ -24,9 +21,9 @@ COPY package.json pnpm-lock.yaml* ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 
-###################
+######################################
 # Second Stage: Build
-###################
+######################################
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -36,9 +33,9 @@ RUN pnpm exec prisma generate
 RUN pnpm run build
 
 
-###################
+######################################
 # Third Stage: Copy build artifact
-###################
+######################################
 FROM base AS runner
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nestjs
