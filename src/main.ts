@@ -4,6 +4,9 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
+import { ConfigService } from "@nestjs/config";
+import { GlobalConfig } from "./app.config.type.js";
+import { VersioningType } from "@nestjs/common";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -21,7 +24,23 @@ async function bootstrap() {
       },
     }),
   );
-  app.enableCors()
-  await app.listen(3000, "0.0.0.0");
+
+  app.enableCors();
+  app.enableShutdownHooks();
+
+  const configService = app.get(ConfigService<GlobalConfig>);
+  app.setGlobalPrefix(
+    configService.getOrThrow("app.API_PREFIX", { infer: true }),
+    {
+      exclude: ["/"],
+    },
+  );
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
+  await app.listen(
+    configService.getOrThrow("app.APP_PORT", { infer: true }),
+    "0.0.0.0",
+  );
 }
 bootstrap();
