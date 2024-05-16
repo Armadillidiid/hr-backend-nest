@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
-export const AuthRegisterLoginSchema = z.object({
+export const signUpRequestSchema = z.object({
   email: z.string().email(),
   fullName: z.string().min(1),
   phoneNumber: z.coerce
@@ -23,4 +23,4 @@ export const AuthRegisterLoginSchema = z.object({
   referralSource: z.string().min(1),
 });
 
-export type AuthRegisterLoginDto = z.infer<typeof AuthRegisterLoginSchema>;
+export type SignUpDto = z.infer<typeof signUpRequestSchema>
