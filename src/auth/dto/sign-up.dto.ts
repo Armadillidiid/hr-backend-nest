@@ -4,7 +4,8 @@ const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
 export const signUpRequestSchema = z.object({
   email: z.string().email(),
-  fullName: z.string().min(1),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
   phoneNumber: z.coerce
     .string()
     .min(10)
