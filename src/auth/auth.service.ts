@@ -4,8 +4,9 @@ import { UpdateAuthDto } from './dto/update-auth.dto.js';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+
+  register(createAuthDto: CreateAuthDto) {
+
   }
 
   findAll() {
