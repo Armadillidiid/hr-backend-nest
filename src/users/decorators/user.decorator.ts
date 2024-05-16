@@ -1,4 +1,4 @@
-import { JwtPayload, JwtRefreshPayload } from "@/auth/auth.types.js";
+import { JwtPayload, JwtRefreshPayload } from "@/auth/auth.type.js";
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { FastifyRequest } from "fastify";
 

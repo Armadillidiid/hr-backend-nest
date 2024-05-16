@@ -2,7 +2,8 @@ import { Controller, Body, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service.js";
 import { HttpCode, HttpStatus } from "@nestjs/common";
 import { ZodValidationPipe } from "@/utils/pipes/ZodValidationPipe.js";
-import { signUpRequestSchema, SignUpDto } from "./dto/sign-up.dto.js";
+import { signUpRequestSchema } from "./dto/sign-up.dto.js";
+import type { SignUpDto } from "./dto/sign-up.dto.js";
 import { UsePipes } from "@nestjs/common";
 
 @Controller({

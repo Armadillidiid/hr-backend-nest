@@ -8,9 +8,9 @@ import { JwtService } from "@nestjs/jwt";
 import { FastifyRequest } from "fastify";
 import { ConfigService } from "@nestjs/config";
 import { GlobalConfig } from "@/app.config.type.js";
-import { JwtPayload } from "../auth.types.js";
+import { JwtPayload } from "../auth.type.js";
 import { Reflector } from "@nestjs/core";
-import { IS_PUBLIC_KEY } from "../auth.decorator.js";
+import { IS_PUBLIC_KEY } from "../decorators/public.decorator.js";
 import { extractTokenFromHeader } from "@/utils/extractTokenFromHeader.js";
 
 @Injectable()
@@ -47,7 +47,7 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException("Token expired");
       }
 
-      if (!payload.id) {
+      if (!payload.publicId) {
         throw new UnauthorizedException();
       }
       request["user"] = payload;
