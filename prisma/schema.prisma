@@ -16,9 +16,234 @@ datasource db {
   relationMode = "foreignKeys"
 }
 
+enum PricingPlan {
+  BASIC
+  PRO
+}
+
+enum PricingType {
+  ONE_TIME
+  RECURRING
+}
+
+enum PricingInterval {
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  PAST_DUE
+  UNPAID
+  PAUSED
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id                      Int                 @id @default(autoincrement())
+  publicId                String              @unique
+  firstName               String
+  lastName                String
+  email                   String              @unique
+  phoneNumber             String
+  password                String
+  registrationInitializer SignUpInitializer[]
+  session                 Session[]
+  businessOwner           BusinessOwner?
+  billingAddress          Json?
+  paymentMethod           Json?
+
+  @@map("User")
+}
+
+model SignUpInitializer {
+  id              Int      @id @default(autoincrement())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          Int
+  signUpCompleted Boolean  @default(false) // If true, the user has completed all the steps of the sign up process
+  emailVerified   Boolean  @default(false) // If false, the user has not verified their email thus redirect to verify email page
+  businessCreated Boolean  @default(false) // If false, the user has not created a business thus redirect to create business page
+  planSelected    Boolean  @default(false) // if false, the user has not selected a plan thus redirect to select plan page
+  createdAt       DateTime @default(now())
+  validUntil      DateTime // If the user has not completed the sign up process within this time, the sign up process is invalidated
+
+  @@map("RegistrationInitializer")
+}
+
+model Pricing {
+  id              String          @id @default(cuid())
+  unitAmount      Int // 1000
+  currency        String // "usd"
+  active          Boolean
+  type            PricingType? // RECURRING
+  interval        PricingInterval // MONTH
+  intervalCount   Int // 1
+  trialPeriodDays Int // 7
+  metadata        Json? // {"key": "value"}
+  Product         Product         @relation(fields: [productId], references: [id])
+  productId       String
+  Subscription    Subscription[]
+}
+
+model Product {
+  id          String      @id @default(cuid()) // 12
+  name        PricingPlan // "PRO"
+  description String // "Pro plan"
+  active      Boolean // true
+  pricing     Pricing[]
+  metadata    Json?
+}
+
+model Subscription {
+  id                 String             @id
+  organization       Organization       @relation(fields: [organizationId], references: [id]) // Reference to the user who owns this subscription.
+  organizationId     String
+  status             SubscriptionStatus // The status of the subscription object.
+  price              Pricing            @relation(fields: [priceId], references: [id]) // Reference to the pricing that created this subscription.
+  priceId            String
+  quantity           Int? // Quantity multiplied by the unit amount of the price creates the amount of the subscription. Can be used to charge multiple seats.
+  cancelAtPeriodEnd  Boolean // If true, the subscription has been canceled by the user and will be deleted at the end of the billing period.
+  created            DateTime           @default(now()) // Time at which the subscription was created.
+  currentPeriodStart DateTime           @default(now()) // Start of the current period that the subscription has been invoiced for.
+  currentPeriodEnd   DateTime           @default(now()) // End of the current period that the subscription has been invoiced for.
+  endedAt            DateTime? // If the subscription has ended, the timestamp of the date the subscription ended.
+  canceledAt         DateTime? // If the subscription has been canceled, the date of that cancellation.
+  trialStart         DateTime? // If the subscription has a trial, the beginning of that trial.
+  trialEnd           DateTime? // If the subscription has a trial, the end of that trial.
+  metadata           Json?
+}
+
+model UserOrganizationProfile {
+  id             String @id
+  userId         Int
+  organizationId String
+  position       String
+  seniority      String
+  role           String
+  profilePicture Int
+
+  @@map("EmployeeProfile")
+}
+
+model OrganizationSubscription {
+  id               Int       @id @default(autoincrement())
+  organizationId   Int
+  pricingId        Int
+  month            Int
+  numberOfEmployee Int
+  amountPaid       Int
+  billingCycle     String
+  startDate        Int
+  endDate          DateTime?
+
+  @@map("OrganizationSubscription")
+}
+
+model Organization {
+  id                         String           @id
+  name                       String
+  tradingName                String
+  industry                   String
+  entityType                 String
+  phoneNumber                String
+  businessRegistrationNumber String
+  taxId                      String
+  address                    Address[]
+  pointOfContact             PointOfContact[]
+  primaryAddress             PrimaryAddress?
+  businessOwner              BusinessOwner?
+  subscription               Subscription[]
+
+  @@map("Organization")
+}
+
+model PrimaryAddress {
+  id             String       @id
+  address        Address      @relation(fields: [addressId], references: [id])
+  addressId      String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @unique
+  primary        Boolean
+
+  @@unique([organizationId, addressId])
+}
+
+model Address {
+  id             String          @id
+  streetOne      String
+  streetTwo      String?
+  city           String?
+  state          String?
+  countryIsoCode String
+  zipCode        String?
+  country        String?
+  organizationId String
+  Organization   Organization    @relation(fields: [organizationId], references: [id])
+  PrimaryAddress PrimaryAddress?
+
+  @@map("Address")
+}
+
+model Session {
+  id        Int       @id @default(autoincrement())
+  hash      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  deletedAt DateTime?
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+
+  @@map("Session")
+}
+
+model BusinessOwner {
+  id             String       @id
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int          @unique
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @unique
+
+  @@map("BusinessOwnerProfile")
+}
+
+model PointOfContact {
+  id             Int           @id @default(autoincrement())
+  email          String
+  phone          String
+  name           String
+  Organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+
+  @@map("PointOfContact")
+}
+
+model EditHistory {
+  id        Int      @id @default(autoincrement())
+  name      String
+  object    Json
+  createdBy Int
+  updatedAt DateTime
+
+  @@map("EditHistory")
+}
+
+model SignUpInterest {
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  SignUpAnalytics SignUpAnalytics[]
+}
+
+model SignUpAnalytics {
+  id             Int            @id @default(autoincrement())
+  organizationId Int
+  interest       SignUpInterest @relation(fields: [interestId], references: [id])
+  interestId     Int
+
+  @@unique([organizationId, interestId])
+  @@map("SignUpAnalytics")
 }
