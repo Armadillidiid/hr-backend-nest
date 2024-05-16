@@ -5,7 +5,8 @@ import { ConfigModule } from "@nestjs/config";
 import { databaseConfig } from "./database/database.config.js";
 import { appConfig } from "./app.config.js";
 import { authConfig } from "./auth/auth.config.js";
-import { AuthModule } from './auth/auth.module.js';
+import { AuthModule } from "./auth/auth.module.js";
+import { RouterModule } from "@nestjs/core";
 
 @Module({
   imports: [
@@ -13,8 +14,16 @@ import { AuthModule } from './auth/auth.module.js';
       isGlobal: true,
       load: [databaseConfig, appConfig, authConfig],
     }),
-    UsersModule,
-    AuthModule,
+    RouterModule.register([
+      {
+        path: "auth",
+        module: AuthModule,
+      },
+      {
+        path: "users",
+        module: UsersModule,
+      },
+    ]),
   ],
   controllers: [AppController],
 })
