@@ -43,7 +43,7 @@ export class AuthRefreshGuard implements CanActivate {
       if (!payload.sessionId) {
         throw new UnauthorizedException();
       }
-      request["user"] = payload;
+      request["userRefresh"] = payload;
     } catch {
       throw new UnauthorizedException();
     }
