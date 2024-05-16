@@ -55,6 +55,8 @@ model User {
   registrationInitializer SignUpInitializer?
   session                 Session[]
   businessOwner           BusinessOwner?
+  referralSource          ReferralSource?    @relation(fields: [referralSourceId], references: [id])
+  referralSourceId        Int?
   billingAddress          Json?
   paymentMethod           Json?
   createdAt               DateTime           @default(now())
@@ -249,4 +251,12 @@ model SignUpAnalytics {
   interestedIn   Json // { "interests": [1, 2, 3] }
 
   @@map("SignUpAnalytics")
+}
+
+model ReferralSource {
+  id     Int    @id @default(autoincrement())
+  source String
+  User   User[]
+
+  @@map("Referral")
 }
