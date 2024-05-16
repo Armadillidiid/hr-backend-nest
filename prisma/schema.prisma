@@ -45,14 +45,14 @@ enum SubscriptionStatus {
 }
 
 model User {
-  id                      Int                 @id @default(autoincrement())
-  publicId                String              @unique
+  id                      Int                @id @default(autoincrement())
+  publicId                String             @unique
   firstName               String
   lastName                String
-  email                   String              @unique
+  email                   String             @unique
   phoneNumber             String
   password                String
-  registrationInitializer SignUpInitializer[]
+  registrationInitializer SignUpInitializer?
   session                 Session[]
   businessOwner           BusinessOwner?
   billingAddress          Json?
@@ -64,13 +64,13 @@ model User {
 model SignUpInitializer {
   id              Int      @id @default(autoincrement())
   user            User     @relation(fields: [userId], references: [id])
-  userId          Int
+  userId          Int      @unique
   signUpCompleted Boolean  @default(false) // If true, the user has completed all the steps of the sign up process
   emailVerified   Boolean  @default(false) // If false, the user has not verified their email thus redirect to verify email page
   businessCreated Boolean  @default(false) // If false, the user has not created a business thus redirect to create business page
   planSelected    Boolean  @default(false) // if false, the user has not selected a plan thus redirect to select plan page
   createdAt       DateTime @default(now())
-  validUntil      DateTime // If the user has not completed the sign up process within this time, the sign up process is invalidated
+  // validUntil      DateTime // If the user has not completed the sign up process within this time, the sign up process is invalidated
 
   @@map("RegistrationInitializer")
 }
