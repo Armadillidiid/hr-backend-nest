@@ -27,6 +27,8 @@ export class AuthService {
         secret: this.configService.get("auth.AUTH_CONFIRM_EMAIL_SECRET", {
           infer: true,
         }),
+        // TODO: create helper function to parse token expiration
+        // E.g: '15m' -> 15 * 60, '1d' -> 24 * 60 * 60
         expiresIn: this.configService.get(
           "auth.AUTH_CONFIRM_EMAIL_TOKEN_EXPIRES_IN",
           { infer: true },
