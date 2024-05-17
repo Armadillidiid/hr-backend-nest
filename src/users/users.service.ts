@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { type CreateUserDto } from "./dto/create-user.dto.js";
 import { type UpdateUserDto } from "./dto/update-user.dto.js";
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { UserRepository } from "./repositories/users.repository.js";
 import { PrismaService } from "@/prisma/prisma.service.js";
 import { generateUniqueId } from "@/utils/generateUniqueId.js";
