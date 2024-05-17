@@ -16,7 +16,7 @@ export class NodeMailerService {
   ) {
     const email = this.configService.getOrThrow("email", { infer: true });
 
-    if (email.PROVIDER === "aws_ses") {
+    if (email.EMAIL_PROVIDER === "aws_ses") {
       this.transporter = nodemailer.createTransport({
         SES: {
           ses: this.awsSESService.ses,

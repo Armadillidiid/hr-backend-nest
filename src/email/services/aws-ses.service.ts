@@ -5,20 +5,22 @@ import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AwsSESService {
-  readonly ses: SES;
+  readonly ses: SES | null;
 
   constructor(private readonly configService: ConfigService<GlobalConfig>) {
     const email = this.configService.getOrThrow("email", { infer: true });
 
+    if (email.EMAIL_PROVIDER !== "aws_ses") {
+      this.ses = null;
+      return;
+    }
+
     this.ses = new SES({
-      credentials:
-        email.PROVIDER === "aws_ses"
-          ? {
-              accessKeyId: email.AWS_ACCESS_KEY_ID,
-              secretAccessKey: email.AWS_SECRET_ACCESS_KEY,
-            }
-          : { accessKeyId: "", secretAccessKey: "" },
-      region: email.PROVIDER === "aws_ses" ? email.AWS_REGION : "",
+      credentials: {
+        accessKeyId: email.AWS_ACCESS_KEY_ID,
+        secretAccessKey: email.AWS_SECRET_ACCESS_KEY,
+      },
+      region: email.EMAIL_PROVIDER,
     });
   }
 }
