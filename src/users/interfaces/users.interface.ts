@@ -1,4 +1,4 @@
-import { Prisma, User } from "@prisma/client";
+import { Prisma, type User } from "@prisma/client";
 
 export interface IUserRepository {
   create: (user: User) => Promise<User>;

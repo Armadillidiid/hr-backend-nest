@@ -1,7 +1,7 @@
-import { DatabaseConfig } from "./database/database.config.js";
-import { AppConfig } from "./app.config.js";
-import { AuthConfig } from "./auth/auth.config.js";
-import { EmailConfig } from "./email/config/email.config.js";
+import type { DatabaseConfig } from "./database/database.config.js";
+import type { AppConfig } from "./app.config.js";
+import type { AuthConfig } from "./auth/auth.config.js";
+import type { EmailConfig } from "./email/config/email.config.js";
 
 export type GlobalConfig = {
   auth: AuthConfig;

@@ -3,9 +3,9 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto.js";
-import { UpdateUserDto } from "./dto/update-user.dto.js";
-import bcrypt from "bcrypt";
+import { type CreateUserDto } from "./dto/create-user.dto.js";
+import { type UpdateUserDto } from "./dto/update-user.dto.js";
+import * as bcrypt from "bcrypt";
 import { UserRepository } from "./repositories/users.repository.js";
 import { PrismaService } from "@/prisma/prisma.service.js";
 import { generateUniqueId } from "@/utils/generateUniqueId.js";

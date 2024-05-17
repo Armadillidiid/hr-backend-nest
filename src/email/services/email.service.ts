@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NodeMailerService } from "./nodemailer.service.js";
-import { GlobalConfig } from "@/app.config.type.js";
+import type { GlobalConfig } from "@/app.config.type.js";
 import ConfirmEmail from "../templates/confirm-email.js";
 
 type SignUpProps = {

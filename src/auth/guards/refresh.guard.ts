@@ -1,14 +1,14 @@
 import {
-  CanActivate,
-  ExecutionContext,
+  type CanActivate,
+  type ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { FastifyRequest } from "fastify";
+import type { FastifyRequest } from "fastify";
 import { ConfigService } from "@nestjs/config";
-import { GlobalConfig } from "@/app.config.type.js";
-import { JwtRefreshPayload } from "../auth.type.js";
+import type { GlobalConfig } from "@/app.config.type.js";
+import type { JwtRefreshPayload } from "../auth.type.js";
 import { extractTokenFromHeader } from "@/utils/extractTokenFromHeader.js";
 
 @Injectable()

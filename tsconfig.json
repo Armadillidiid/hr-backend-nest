@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
+    "verbatimModuleSyntax": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "jsx": "react-jsx",

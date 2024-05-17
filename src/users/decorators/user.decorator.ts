@@ -1,6 +1,5 @@
-import { JwtPayload, JwtRefreshPayload } from "@/auth/auth.type.js";
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { FastifyRequest } from "fastify";
+import { createParamDecorator, type ExecutionContext } from "@nestjs/common";
+import { type FastifyRequest } from "fastify";
 
 export const User = createParamDecorator(
   (data: "jwt" | "jwt-refresh" | undefined, ctx: ExecutionContext) => {

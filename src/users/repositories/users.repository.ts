@@ -1,6 +1,6 @@
 import { PrismaService } from "@/prisma/prisma.service.js";
-import { IUserRepository } from "../interfaces/users.interface.js";
-import { Prisma, User } from "@prisma/client";
+import { type IUserRepository } from "../interfaces/users.interface.js";
+import { Prisma, type User } from "@prisma/client";
 
 // TODO: Argument types are wrong in the following methods.
 // Delete file or Change them to the correct types.

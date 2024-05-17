@@ -1,4 +1,4 @@
-import { GlobalConfig } from "@/app.config.type.js";
+import type { GlobalConfig } from "@/app.config.type.js";
 import { SES } from "@aws-sdk/client-ses";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";

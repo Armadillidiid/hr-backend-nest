@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { SignUpDto } from "./dto/sign-up.dto.js";
+import type { SignUpDto } from "./dto/sign-up.dto.js";
 import { UsersService } from "@/users/users.service.js";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import { GlobalConfig } from "@/app.config.type.js";
+import type { GlobalConfig } from "@/app.config.type.js";
 import { PrismaService } from "@/prisma/prisma.service.js";
 
 @Injectable()

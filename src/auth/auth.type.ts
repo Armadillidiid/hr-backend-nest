@@ -1,4 +1,4 @@
-import { Session, User } from "@prisma/client";
+import type { Session, User } from "@prisma/client";
 
 export type JwtPayload = Pick<User, "publicId"> & {
   sessionId: Session["publicId"];

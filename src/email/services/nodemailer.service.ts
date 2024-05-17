@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import nodemailer from "nodemailer";
-import { GlobalConfig } from "@/app.config.type.js";
+import type { GlobalConfig } from "@/app.config.type.js";
 import { render } from "@react-email/components";
 import { AwsSESService } from "./aws-ses.service.js";
 import aws from "@aws-sdk/client-ses";
