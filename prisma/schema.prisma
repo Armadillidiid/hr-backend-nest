@@ -55,12 +55,11 @@ model User {
   registrationInitializer SignUpInitializer?
   session                 Session[]
   businessOwner           BusinessOwner?
-  referralSource          ReferralSource?    @relation(fields: [referralSourceId], references: [id])
-  referralSourceId        Int?
   billingAddress          Json?
   paymentMethod           Json?
   createdAt               DateTime           @default(now())
   updatedAt               DateTime           @updatedAt
+  ReferralSource          ReferralSource?
 
   @@map("User")
 }
@@ -256,7 +255,8 @@ model SignUpAnalytics {
 model ReferralSource {
   id     Int    @id @default(autoincrement())
   source String
-  User   User[]
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
 
   @@map("Referral")
 }
