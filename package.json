@@ -11,6 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
+    "email": "email -dev -d ./src/email/templates/",
     "start:debug": "nest start --debug --watch",
     "postinstall": "prisma generate",
     "start:prod": "node dist/main",
